@@ -1,0 +1,123 @@
+/*
+* How I add a conjugation for a verb
+* 1. Copy the latest update_conjugates_with_x.php file in database/migrations
+* 2. Use the name to update_conjugates_with_yourverbname.php (make the date later to order correctly)
+* 3. Goto https://www.spanishdict.com/conjugate/verb_name_here
+* 4. Copy the text from this page and paste it in the console
+* 5. In your file, update the infinative with the verb name,
+* 6. Paste the clipboard (json string) replacing the contents of the string.
+* 7. Run the command: php artisan migrate
+*/
+
+let tables = Array.from(document.querySelectorAll('table'));
+let indicativeRows = Array.from(tables[1].querySelectorAll('tr'));
+let indicativeCells = [];
+indicativeRows.forEach((row, index) => {
+	let cells = Array.from(row.querySelectorAll('td'))
+	indicativeCells.push(cells)
+})
+let indicativeHeaders = ['type', 'present', 'preterite', 'imperfect', 'conditional','future'];
+let conjugatedValues = {};
+for (let i = 1;i < indicativeRows.length;i++) {
+ 	let cell0 = indicativeCells[i][0].innerText.toLowerCase()
+ 	cell0 = cell0.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace('.', '')
+ 	if (cell0.indexOf('/') > 0) {
+ 		cell0 = cell0.substr(0, cell0.indexOf('/'))
+ 	}
+ 	for (let j = 1;j < indicativeHeaders.length;j++) {
+		let key = `indicative_${indicativeHeaders[j]}_${cell0}`;
+		conjugatedValues[key] = indicativeCells[i][j].innerText
+	}
+}
+let subjunctiveRows = Array.from(tables[2].querySelectorAll('tr'));
+let subjunctiveCells = [];
+subjunctiveRows.forEach((row, index) => {
+	let cells = Array.from(row.querySelectorAll('td'))
+	subjunctiveCells.push(cells)
+})
+let subjunctiveHeaders = ['type', 'present', 'preterite', 'imperfect'];
+for (let i = 1;i < subjunctiveRows.length;i++) {
+ 	let cell0 = subjunctiveCells[i][0].innerText.toLowerCase()
+ 	cell0 = cell0.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace('.', '')
+ 	if (cell0.indexOf('/') > 0) {
+ 		cell0 = cell0.substr(0, cell0.indexOf('/'))
+ 	}
+ 	for (let j = 1;j < subjunctiveHeaders.length;j++) {
+		let key = `subjunctive_${subjunctiveHeaders[j]}_${cell0}`;
+		conjugatedValues[key] = subjunctiveCells[i][j].innerText
+	}
+}
+let imperativeRows = Array.from(tables[3].querySelectorAll('tr'));
+let imperativeCells = [];
+imperativeRows.forEach((row, index) => {
+	let cells = Array.from(row.querySelectorAll('td'))
+	imperativeCells.push(cells)
+})
+let imperativeHeaders = ['type', 'affirmative', 'negative'];
+for (let i = 1;i < imperativeRows.length;i++) {
+ 	let cell0 = imperativeCells[i][0].innerText.toLowerCase()
+ 	cell0 = cell0.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace('.', '')
+ 	if (cell0.indexOf('/') > 0) {
+ 		cell0 = cell0.substr(0, cell0.indexOf('/'))
+ 	}
+ 	for (let j = 1;j < imperativeHeaders.length;j++) {
+		let key = `imperative_${imperativeHeaders[j]}_${cell0}`;
+		conjugatedValues[key] = imperativeCells[i][j].innerText
+	}
+}
+
+let progressiveRows = Array.from(tables[4].querySelectorAll('tr'));
+let progressiveCells = [];
+progressiveRows.forEach((row, index) => {
+	let cells = Array.from(row.querySelectorAll('td'))
+	progressiveCells.push(cells)
+})
+let progressiveHeaders = ['type', 'present', 'preterite', 'imperfect', 'conditional','future'];
+for (let i = 1;i < progressiveRows.length;i++) {
+ 	let cell0 = progressiveCells[i][0].innerText.toLowerCase()
+ 	cell0 = cell0.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace('.', '')
+ 	if (cell0.indexOf('/') > 0) {
+ 		cell0 = cell0.substr(0, cell0.indexOf('/'))
+ 	}
+ 	for (let j = 1;j < progressiveHeaders.length;j++) {
+		let key = `progressive_${progressiveHeaders[j]}_${cell0}`;
+		conjugatedValues[key] = progressiveCells[i][j].innerText
+	}
+}
+let perfectRows = Array.from(tables[5].querySelectorAll('tr'));
+let perfectCells = [];
+perfectRows.forEach((row, index) => {
+	let cells = Array.from(row.querySelectorAll('td'))
+	perfectCells.push(cells)
+})
+let perfectHeaders = ['type', 'present', 'preterite', 'past', 'conditional','future'];
+for (let i = 1;i < perfectRows.length;i++) {
+ 	let cell0 = perfectCells[i][0].innerText.toLowerCase()
+ 	cell0 = cell0.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace('.', '')
+ 	if (cell0.indexOf('/') > 0) {
+ 		cell0 = cell0.substr(0, cell0.indexOf('/'))
+ 	}
+ 	for (let j = 1;j < perfectHeaders.length;j++) {
+		let key = `perfect_${perfectHeaders[j]}_${cell0}`;
+		conjugatedValues[key] = perfectCells[i][j].innerText
+	}
+}
+let perfect_subjunctiveRows = Array.from(tables[6].querySelectorAll('tr'));
+let perfect_subjunctiveCells = [];
+perfect_subjunctiveRows.forEach((row, index) => {
+	let cells = Array.from(row.querySelectorAll('td'))
+	perfect_subjunctiveCells.push(cells)
+})
+let perfect_subjunctiveHeaders = ['type', 'present', 'past', 'future'];
+for (let i = 1;i < perfect_subjunctiveRows.length;i++) {
+ 	let cell0 = perfect_subjunctiveCells[i][0].innerText.toLowerCase().replace('.', '')
+ 	cell0 = cell0.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+ 	if (cell0.indexOf('/') > 0) {
+ 		cell0 = cell0.substr(0, cell0.indexOf('/'))
+ 	}
+ 	for (let j = 1;j < perfect_subjunctiveHeaders.length;j++) {
+		let key = `perfect_subjunctive_${perfect_subjunctiveHeaders[j]}_${cell0}`;
+		conjugatedValues[key] = perfect_subjunctiveCells[i][j].innerText
+	}
+}
+copy(JSON.stringify(conjugatedValues))
