@@ -2,6 +2,7 @@
 
     <div class="p-40 bg-gray-800 text-white">
         <h1>Conjugate</h1>
+        <p>Currently Broken while working on the multiple view...</p>
         <div>
             <select v-model="selectedVerb" key="selectedVerb" class="bg-gray-700">
                 <option v-for="(verb, index) in conjugates" :value="index">{{ verb['infinitive'] }}</option>

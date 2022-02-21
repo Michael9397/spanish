@@ -3,21 +3,26 @@
     <div class="p-40 bg-gray-900 text-white">
         <h1>Tense</h1>
         <div>
-            <select v-model="selectedTense" key="selectedTense" class="bg-gray-700" @change="initAnswers">
-                <option v-for="(tense, index) in indicativeTense" :value="index">{{ tense }}</option>
-            </select>
+            <div class="flex items-center h-full">
+                <select v-model="selectedTense" key="selectedTense" class="bg-gray-700" @change="initAnswers">
+                    <option v-for="(tense, index) in indicativeTense" :value="index">{{ tense }}</option>
+                </select>
+                <label class="pl-4 flex items-center">
+                    <input type="checkbox" v-model="includeVosotros">
+                    <span class="pl-2">Include vosotros</span>
+                </label>
+            </div>
             <div v-if="currentTense.length > 0" class="bg-gray-800">
                 <h2 class="ml-48 font-extrabold text-3xl">{{currentTense}}</h2>
-
-                <div class="grid grid-cols-7">
+                <div class="grid" :class="countRows">
                     <div class="text-right">Verb</div>
-                    <div v-for="form in indicativeForms" class="font-bold ml-5">
+                    <div v-for="form in indicativeFormsList" class="font-bold ml-5 text-green-200">
                         {{ `${form[0].toUpperCase()}${form.slice(1)}` }}
                     </div>
                 </div>
-                <div v-for="item in dataLayout" class="grid grid-cols-7">
+                <div v-for="item in dataLayout" class="grid" :class="countRows">
                     <div class="pt-4 text-right">{{ item.infinitive }}</div>
-                    <div v-for="form in indicativeForms">
+                    <div v-for="form in indicativeFormsList">
                         <PracticeInput
                             :correct-answer="item[form]"
                             :answer-key="`${item.infinitive}_${form}`"
@@ -49,12 +54,16 @@ export default {
             indicativeTense: ['present', 'preterite', 'imperfect', 'conditional', 'future'],
             indicativeForms: ['yo', 'tu', 'el', 'nosotros', 'vosotros', 'ellos'],
             answers: {},
+            includeVosotros: false,
         }
     },
     created() {
         this.initAnswers()
     },
     computed: {
+        countRows() {
+            return this.includeVosotros ? 'grid-cols-7' : 'grid-cols-6'
+        },
         currentTense()
         {
             if (this.selectedTense.length === 0) {
@@ -79,6 +88,11 @@ export default {
                 })
             })
             return dataLayout
+        },
+        indicativeFormsList()
+        {
+            if (this.includeVosotros) return this.indicativeForms
+            return [...this.indicativeForms].filter(form => form !== 'vosotros')
         },
     },
     methods: {
