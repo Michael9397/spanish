@@ -2,7 +2,10 @@
     <div :class="backgroundColor" class="p-4 text-gray-200 flex" >
         <input v-if="showCurrentAnswer" v-model="currentAnswer" class="w-2/3 mr-4 bg-gray-700" @click:.prevent @keyup="changeAnswer">
         <div v-else class="w-2/3 mr-4 bg-gray-900">{{ this.correctAnswer }}</div>
-        <span class="text-gray-200" v-if="showCurrentAnswer" @click="toggleAnswer">
+        <span class="text-gray-200" v-if="currentAnswer === correctAnswer">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+        </span>
+        <span class="text-gray-200" v-else-if="showCurrentAnswer" @click="toggleAnswer">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
         </span>
         <span class="text-gray-200" v-else @click="toggleAnswer">
