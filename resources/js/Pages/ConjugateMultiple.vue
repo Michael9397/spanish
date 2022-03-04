@@ -7,6 +7,7 @@
                 <select v-model="selectedTense" key="selectedTense" class="bg-gray-700" @change="initAnswers">
                     <option v-for="(tense, index) in indicativeTense" :value="index">{{ tense }}</option>
                 </select>
+                <button @click="shuffleVerbs" class="ml-4 bg-gray-700 rounded-lg p-2">Shuffle Verbs</button>
                 <label class="pl-4 flex items-center">
                     <input type="checkbox" v-model="includeVosotros">
                     <span class="pl-2">Include vosotros</span>
@@ -55,10 +56,12 @@ export default {
             indicativeForms: ['yo', 'tu', 'el', 'nosotros', 'vosotros', 'ellos'],
             answers: {},
             includeVosotros: false,
+            conjugateList: [],
         }
     },
     created() {
         this.initAnswers()
+        this.conjugateList = this.conjugates
     },
     computed: {
         countRows() {
@@ -75,7 +78,7 @@ export default {
         dataLayout()
         {
             let dataLayout = [];
-            this.conjugates.forEach(conjugate => {
+            this.conjugateList.forEach(conjugate => {
                 let tense = this.indicativeTense[this.selectedTense]
                 dataLayout.push({
                     infinitive: conjugate[`infinitive`],
@@ -107,6 +110,9 @@ export default {
         },
         onUpdateAnswer({key, value}) {
             this.answers[key] = value
+        },
+        shuffleVerbs() {
+            this.conjugateList = this.conjugateList.sort(() => Math.random() - 0.5)
         },
     },
 }
