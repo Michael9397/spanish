@@ -1,29 +1,32 @@
 <template>
 
     <div class="p-40 bg-gray-900 text-white">
-        <h1>Tense</h1>
         <div>
             <div class="flex items-center h-full">
+                <select v-model="selectedMode" key="selectedMode" class="bg-gray-700" @change="initAnswers">
+                    <option v-for="mode in modes" :value="mode">{{ mode.capitalize() }}</option>
+                </select>
                 <select v-model="selectedTense" key="selectedTense" class="bg-gray-700" @change="initAnswers">
-                    <option v-for="(tense, index) in indicativeTense" :value="index">{{ tense }}</option>
+                    <option v-for="tense in currentTenseList" :value="tense">{{ tense.capitalize() }}</option>
                 </select>
                 <button @click="shuffleVerbs" class="ml-4 bg-gray-700 rounded-lg p-2">Shuffle Verbs</button>
+                <button @click="initAnswers" class="ml-4 bg-gray-700 rounded-lg p-2">Clear Answers</button>
                 <label class="pl-4 flex items-center">
                     <input type="checkbox" v-model="includeVosotros">
                     <span class="pl-2">Include vosotros</span>
                 </label>
             </div>
-            <div v-if="currentTense.length > 0" class="bg-gray-800">
-                <h2 class="ml-48 font-extrabold text-3xl">{{currentTense}}</h2>
-                <div class="grid" :class="countRows">
-                    <div class="text-right">Verb</div>
-                    <div v-for="form in indicativeFormsList" class="font-bold ml-5 text-green-200">
-                        {{ `${form[0].toUpperCase()}${form.slice(1)}` }}
+            <div class="bg-gray-800 p-6">
+                <h2 class="font-extrabold text-3xl">{{ currentTenseTitle }}</h2>
+                <div class="grid" :style="gridRows">
+                    <div class="text-right max-w-xs"></div>
+                    <div v-for="form in currentFormsList" class="font-bold ml-5 font-extrabold">
+                        {{ form }}
                     </div>
                 </div>
-                <div v-for="item in dataLayout" class="grid" :class="countRows">
-                    <div class="pt-4 text-right">{{ item.infinitive }}</div>
-                    <div v-for="form in indicativeFormsList">
+                <div v-for="item in dataLayout" class="grid" :style="gridRows">
+                    <div class="pt-4 text-right font-extrabold max-w-xs">{{ item.infinitive }}</div>
+                    <div v-for="form in currentFormsList">
                         <PracticeInput
                             :correct-answer="item[form]"
                             :answer-key="`${item.infinitive}_${form}`"
@@ -39,6 +42,8 @@
 
 <script>
 import PracticeInput  from "@/Components/PracticeInput"
+import { conjugateMap } from "@/Partials/ConjugateMap"
+
 export default {
     name: "Conjugate",
 
@@ -51,12 +56,12 @@ export default {
     components: { PracticeInput},
     data() {
         return {
-            selectedTense: '',
-            indicativeTense: ['present', 'preterite', 'imperfect', 'conditional', 'future'],
-            indicativeForms: ['yo', 'tu', 'el', 'nosotros', 'vosotros', 'ellos'],
+            selectedMode: 'indicative',
+            selectedTense: 'present',
             answers: {},
-            includeVosotros: false,
             conjugateList: [],
+            includeVosotros: false,
+            modes: Object.keys(conjugateMap),
         }
     },
     created() {
@@ -64,49 +69,60 @@ export default {
         this.conjugateList = this.conjugates
     },
     computed: {
-        countRows() {
-            return this.includeVosotros ? 'grid-cols-7' : 'grid-cols-6'
-        },
-        currentTense()
+        currentTenseTitle()
         {
             if (this.selectedTense.length === 0) {
                 return ''
             }
-            const word = this.indicativeTense[this.selectedTense]
-            return `Indicative ${word[0].toUpperCase()}${word.slice(1)}`
+            return `${this.selectedMode.capitalize()} ${this.selectedTense.capitalize()}`
+        },
+        currentTenseList()
+        {
+            if (this.selectedMode.length === 0) {
+                return []
+            }
+            return Object.keys(conjugateMap[this.selectedMode])
+        },
+        currentFormsList()
+        {
+          if (!(this.selectedTense in conjugateMap[this.selectedMode])) {
+              this.selectedTense = Object.keys(conjugateMap[this.selectedMode])[0]
+          }
+          return conjugateMap[this.selectedMode][this.selectedTense]
+            .filter(form => {
+                return this.includeVosotros || form !== 'vosotros'
+            })
         },
         dataLayout()
         {
-            let dataLayout = [];
+            let dataLayout = []
+            let mode = this.selectedMode
+            let tense = this.selectedTense
             this.conjugateList.forEach(conjugate => {
-                let tense = this.indicativeTense[this.selectedTense]
-                dataLayout.push({
-                    infinitive: conjugate[`infinitive`],
-                    yo: conjugate[`indicative_${tense}_yo`],
-                    tu: conjugate[`indicative_${tense}_tu`],
-                    el: conjugate[`indicative_${tense}_el`],
-                    nosotros: conjugate[`indicative_${tense}_nosotros`],
-                    vosotros: conjugate[`indicative_${tense}_vosotros`],
-                    ellos: conjugate[`indicative_${tense}_ellos`],
+                let row = {
+                    infinitive: conjugate.infinitive,
+                }
+                conjugateMap[mode][tense].forEach(form => {
+                    row[form] = conjugate[`${mode}_${tense}_${form}`]
                 })
+                dataLayout.push(row)
             })
             return dataLayout
         },
-        indicativeFormsList()
-        {
-            if (this.includeVosotros) return this.indicativeForms
-            return [...this.indicativeForms].filter(form => form !== 'vosotros')
+        gridRows() {
+            return { gridTemplateColumns: `50px repeat(${this.currentFormsList.length}, 1fr)` }
+//            return `grid-cols-${this.currentFormsList.length + 1}`
         },
     },
     methods: {
         initAnswers() {
             this.answers = {}
-            this.answers = this.conjugates.reduce((acc, item) => {
-                for (let form of this.indicativeForms) {
-                    acc[`${item.infinitive}_${form}`] = '';
-                }
-                return acc;
-            }, {});
+//            this.answers = this.conjugates.reduce((acc, item) => {
+//                for (let form of this.currentFormsList) {
+//                    acc[`${item.infinitive}_${form}`] = '';
+//                }
+//                return acc;
+//            }, {});
         },
         onUpdateAnswer({key, value}) {
             this.answers[key] = value
