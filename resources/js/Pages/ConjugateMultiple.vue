@@ -1,6 +1,6 @@
 <template>
 
-    <div class="p-40 bg-gray-900 text-white">
+    <div class="2xl:p-40 bg-gray-900 text-white">
         <div>
             <div class="flex items-center h-full">
                 <select id="mode-selector" v-model="selectedMode" key="selectedMode" class="bg-gray-700" @change="initAnswers">
@@ -111,18 +111,11 @@ export default {
         },
         gridRows() {
             return { gridTemplateColumns: `50px repeat(${this.currentFormsList.length}, minmax(200px, 1fr))` }
-//            return `grid-cols-${this.currentFormsList.length + 1}`
         },
     },
     methods: {
         initAnswers() {
             this.answers = {}
-//            this.answers = this.conjugates.reduce((acc, item) => {
-//                for (let form of this.currentFormsList) {
-//                    acc[`${item.infinitive}_${form}`] = '';
-//                }
-//                return acc;
-//            }, {});
         },
         onUpdateAnswer({key, value}) {
             this.answers[key] = value
