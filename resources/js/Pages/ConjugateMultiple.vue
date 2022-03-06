@@ -3,10 +3,10 @@
     <div class="p-40 bg-gray-900 text-white">
         <div>
             <div class="flex items-center h-full">
-                <select v-model="selectedMode" key="selectedMode" class="bg-gray-700" @change="initAnswers">
+                <select id="mode-selector" v-model="selectedMode" key="selectedMode" class="bg-gray-700" @change="initAnswers">
                     <option v-for="mode in modes" :value="mode">{{ mode.capitalize() }}</option>
                 </select>
-                <select v-model="selectedTense" key="selectedTense" class="bg-gray-700" @change="initAnswers">
+                <select id="tense-selector" v-model="selectedTense" key="selectedTense" class="bg-gray-700" @change="initAnswers">
                     <option v-for="tense in currentTenseList" :value="tense">{{ tense.capitalize() }}</option>
                 </select>
                 <button @click="shuffleVerbs" class="ml-4 bg-gray-700 rounded-lg p-2">Shuffle Verbs</button>
@@ -110,7 +110,7 @@ export default {
             return dataLayout
         },
         gridRows() {
-            return { gridTemplateColumns: `50px repeat(${this.currentFormsList.length}, 1fr)` }
+            return { gridTemplateColumns: `50px repeat(${this.currentFormsList.length}, minmax(200px, 1fr))` }
 //            return `grid-cols-${this.currentFormsList.length + 1}`
         },
     },
