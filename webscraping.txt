@@ -4,7 +4,7 @@
 * 2. Use the name to update_conjugates_with_yourverbname.php (make the date later to order correctly)
 * 3. Goto https://www.spanishdict.com/conjugate/verb_name_here
 * 4. Copy the text from this page and paste it in the console
-* 5. In your file, update the infinative with the verb name,
+* 5. In your file, update the infinitive with the verb name,
 * 6. Paste the clipboard (json string) replacing the contents of the string.
 * 7. Run the command: php artisan migrate
 */

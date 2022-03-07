@@ -1,7 +1,7 @@
 <template>
     <div class="pl-4">
         <div :class="backgroundColor" class="pt-4 text-gray-200 flex" >
-            <input :id="labelId" v-if="showCurrentAnswer" v-model="currentAnswer" class="w-2/3 mr-4 bg-gray-700" @click:.prevent @keyup="changeAnswer">
+            <input :id="labelId" v-if="showCurrentAnswer" v-model="currentAnswer" class="w-2/3 mr-4 bg-gray-700" @click:.prevent @keyup="changeAnswer" autocomplete="off">
             <div :id="`${labelId}-correct-answer`" v-else class="w-2/3 mr-4 bg-gray-900">{{ this.correctAnswer }}</div>
         </div>
         <div class="flex pt-2" :class="backgroundColor">
