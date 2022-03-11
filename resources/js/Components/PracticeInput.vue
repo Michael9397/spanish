@@ -21,7 +21,8 @@
     </div>
 </template>
 <script setup>
-    import { ref, computed, defineProps, defineEmits } from "vue"
+    import { ref, computed } from "vue"
+    import Speech from "../Partials/speech.js"
 
     const props = defineProps({
         correctAnswer: { type: String, required: true },
@@ -53,18 +54,11 @@
     const labelId = computed(()=> props.answerKey.replace(/[_]/g, '-'))
     const changeAnswer = (e) => emit('change-answer', {key: props.answerKey, value: e.target.value})
 
+    const speech = new Speech()
     const speakAnswer = ()=> {
-        const synth = window.speechSynthesis;
-        const voices = synth.getVoices();
-        const utterThis = new SpeechSynthesisUtterance(props.correctAnswer);
-//            utterThis.voice = voices.find(voice => voice.name === 'Google español de Estados Unidos');
-        utterThis.voice = voices.find(voice => voice.lang === 'es-MX');
-        utterThis.pitch = 1;
-        utterThis.rate = 1;
-        synth.speak(utterThis);
+        speech.speak(props.correctAnswer)
     }
 
-//        return { showCurrentAnswer, isCorrect, toggleAnswer, normalizedWord, backgroundColor, labelId, changeAnswer, speakAnswer }
 </script>
 
 <style scoped>
