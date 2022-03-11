@@ -20,68 +20,51 @@
         </div>
     </div>
 </template>
+<script setup>
+    import { ref, computed, defineProps, defineEmits } from "vue"
 
-<script>
-export default {
-    name: "PracticeInput",
-    props: {
-        correctAnswer: {
-            type: String,
-            required: true
-        },
-        answerKey: {
-            type: String,
-            required: true
-        },
-        currentAnswer: {
-            type: String,
-            default: ''
-        },
-    },
-    data() {
-        return {
-            showCurrentAnswer: true,
-        }
-    },
-    methods: {
-        changeAnswer(e) {
-            this.$emit('change-answer', {key: this.answerKey, value: e.target.value})
-        },
-        toggleAnswer() {
-            if (this.correctAnswer === '_') {
-                this.showCurrentAnswer = true
-                return
-            }
-            this.showCurrentAnswer = !this.showCurrentAnswer;
-        },
-        normalizedWord(word) {
-            return word.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-        },
-        speakAnswer() {
-            var synth = window.speechSynthesis;
-            let voices = synth.getVoices();
-            let utterThis = new SpeechSynthesisUtterance(this.correctAnswer);
-//            utterThis.voice = voices.find(voice => voice.name === 'Google español de Estados Unidos');
-            utterThis.voice = voices.find(voice => voice.lang === 'es-MX');
-            utterThis.pitch = 1;
-            utterThis.rate = 1;
-            synth.speak(utterThis);
-        },
-    },
-    computed: {
-        isCorrect() {
-            return this.currentAnswer === this.correctAnswer || this.correctAnswer === '-'
-        },
-        backgroundColor() {
-            if (this.isCorrect) return "bg-green-900";
-            if (this.normalizedWord(this.correctAnswer) === this.normalizedWord(this.currentAnswer)) return "bg-red-900";
-            return '';
-        },
-        labelId() {
-            return this.answerKey.replace(/[_]/g, '-');
-        },
+    const props = defineProps({
+        correctAnswer: { type: String, required: true },
+        answerKey: { type: String,required: true },
+        currentAnswer: { type: String, default: '' },
+    })
+    const emit = defineEmits(['change-answer'])
+
+
+    const isCorrect = () => {
+        return props.currentAnswer === props.correctAnswer || props.correctAnswer === '-'
     }
-}
+
+    const showCurrentAnswer = ref(true)
+    const toggleAnswer = ()=> {
+        if (props.correctAnswer === '_') {
+            showCurrentAnswer.value = true
+            return
+        }
+        showCurrentAnswer.value = !showCurrentAnswer.value;
+    }
+
+    const normalizedWord = ((word) => word.normalize("NFD").replace(/[\u0300-\u036f]/g, ""))
+    const backgroundColor = computed(()=> {
+        if (isCorrect()) return "bg-green-900";
+        if (normalizedWord(props.correctAnswer) === normalizedWord(props.currentAnswer)) return "bg-red-900";
+        return '';
+    })
+    const labelId = computed(()=> props.answerKey.replace(/[_]/g, '-'))
+    const changeAnswer = (e) => emit('change-answer', {key: props.answerKey, value: e.target.value})
+
+    const speakAnswer = ()=> {
+        const synth = window.speechSynthesis;
+        const voices = synth.getVoices();
+        const utterThis = new SpeechSynthesisUtterance(props.correctAnswer);
+//            utterThis.voice = voices.find(voice => voice.name === 'Google español de Estados Unidos');
+        utterThis.voice = voices.find(voice => voice.lang === 'es-MX');
+        utterThis.pitch = 1;
+        utterThis.rate = 1;
+        synth.speak(utterThis);
+    }
+
+//        return { showCurrentAnswer, isCorrect, toggleAnswer, normalizedWord, backgroundColor, labelId, changeAnswer, speakAnswer }
 </script>
 
 <style scoped>
