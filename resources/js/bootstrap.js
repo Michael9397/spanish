@@ -33,3 +33,17 @@ Object.defineProperty(String.prototype, 'capitalize', {
     },
     enumerable: false
 });
+Object.defineProperty(String.prototype, 'capitalizeEach', {
+    value: function(separator = ' ') {
+        return this.split(' ')
+           .map(function(word) {
+                return word.capitalize();
+            })
+           .join(separator)
+           .split('_')
+           .map(function(word) {
+               return word.capitalize();
+           }).join(separator);
+    },
+    enumerable: false
+});

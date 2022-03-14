@@ -21,7 +21,7 @@
                 </div>
                 <div v-for="(elements, mode) in map">
                     <div class="grid gap-0.5" :style="gridRows">
-                        <div class="font-extrabold mr-5 mt-4">{{ mode.capitalize() }}</div>
+                        <div class="font-extrabold mr-5 mt-4">{{ mode.capitalizeEach() }}</div>
                         <div v-for="form in elementList(elements)" class="ml-4">
                             <PracticeInput
                                 :correct-answer="conjugates[selectedVerb][`${tense}_${mode}_${form}`]"
@@ -48,9 +48,9 @@
             required: true
         }
     })
-    let includeVosotros = ref(false)
-    let answers = ref({})
-    const initAnswers = ()=> { answers = {} }
+    const includeVosotros = ref(false)
+    const answers = ref({})
+    const initAnswers = ()=> { answers.value = {} }
     initAnswers()
     let selectedVerb = ref(0)
     let tenseForms = (tense)=> {
@@ -63,8 +63,8 @@
         let count = includeVosotros.value ? 7: 6
         return { gridTemplateColumns: `50px repeat(${count}, minmax(200px, 1fr))` }
     })
-    let onUpdateAnswer = (key, value)=> {
-        answers[key] = value
+    const onUpdateAnswer = ({key, value})=> {
+        answers.value[key] = value
     }
     let elementList = (elements)=> {
         return elements.filter(element => {

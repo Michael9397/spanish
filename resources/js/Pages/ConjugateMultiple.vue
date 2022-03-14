@@ -7,7 +7,7 @@
                     <option v-for="mode in modes" :value="mode">{{ mode.capitalize() }}</option>
                 </select>
                 <select id="tense-selector" v-model="selectedTense" key="selectedTense" class="bg-gray-700" @change="initAnswers">
-                    <option v-for="tense in currentTenseList" :value="tense">{{ tense.capitalize() }}</option>
+                    <option v-for="tense in currentTenseList" :value="tense">{{ tense.capitalizeEach() }}</option>
                 </select>
                 <button @click="shuffleVerbs" class="ml-4 bg-gray-700 rounded-lg p-2">Shuffle Verbs</button>
                 <button @click="initAnswers" class="ml-4 bg-gray-700 rounded-lg p-2">Clear Answers</button>
@@ -72,7 +72,7 @@
     conjugateList = props.conjugates
 
     const currentTenseTitle = computed(()=> {
-        return `${selectedMode.value.capitalize()} ${selectedTense.value.capitalize()}`
+        return `${selectedMode.value.capitalizeEach()} ${selectedTense.value.capitalizeEach()}`
     })
 
     let currentFormsList = computed(()=> {
