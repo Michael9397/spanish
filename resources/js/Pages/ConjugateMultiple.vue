@@ -24,7 +24,7 @@
                         {{ form }}
                     </div>
                 </div>
-                <div v-for="item in dataLayout" class="grid" :style="gridRows">
+                <div v-for="item in dataLayout()" class="grid" :style="gridRows">
                     <div class="pt-4 text-right font-extrabold max-w-xs">{{ item.infinitive }}</div>
                     <div v-for="form in currentFormsList">
                         <PracticeInput
@@ -40,91 +40,72 @@
     </div>
 </template>
 
-<script>
-import PracticeInput  from "@/Components/PracticeInput"
-import { conjugateMap } from "@/Partials/ConjugateMap"
-
-export default {
-    name: "Conjugate",
-
-    props: {
+<script setup>
+    import PracticeInput  from "@/Components/PracticeInput"
+    import { conjugateMap } from "@/Partials/ConjugateMap"
+    import { ref, computed } from "vue"
+    let props = defineProps({
         conjugates: {
             type: Array,
             required: true
         }
-    },
-    components: { PracticeInput},
-    data() {
-        return {
-            selectedMode: 'indicative',
-            selectedTense: 'present',
-            answers: {},
-            conjugateList: [],
-            includeVosotros: false,
-            modes: Object.keys(conjugateMap),
+    })
+    let selectedMode = ref('indicative')
+    let selectedTense = ref('present')
+    let answers = ref({})
+    let conjugateList = ref([])
+    let includeVosotros = ref(false)
+    let modes = ref(Object.keys(conjugateMap))
+
+    const currentTenseList = computed(()=> {
+        return Object.keys(conjugateMap[selectedMode.value])
+    })
+
+    const onUpdateAnswer = ({key, value})=> {
+        answers[key] = value
+    }
+    const shuffleVerbs = ()=> {
+        conjugateList = conjugateList.sort(() => Math.random() - 0.5)
+    }
+    const initAnswers = ()=> { answers = {} }
+    initAnswers()
+    conjugateList = props.conjugates
+
+    const currentTenseTitle = computed(()=> {
+        return `${selectedMode.value.capitalize()} ${selectedTense.value.capitalize()}`
+    })
+
+    let currentFormsList = computed(()=> {
+        if (!(
+            selectedTense.value in conjugateMap[selectedMode.value]
+        )) {
+            selectedTense.value = Object.keys(conjugateMap[selectedMode.value])[0]
         }
-    },
-    created() {
-        this.initAnswers()
-        this.conjugateList = this.conjugates
-    },
-    computed: {
-        currentTenseTitle()
-        {
-            if (this.selectedTense.length === 0) {
-                return ''
-            }
-            return `${this.selectedMode.capitalize()} ${this.selectedTense.capitalize()}`
-        },
-        currentTenseList()
-        {
-            if (this.selectedMode.length === 0) {
-                return []
-            }
-            return Object.keys(conjugateMap[this.selectedMode])
-        },
-        currentFormsList()
-        {
-          if (!(this.selectedTense in conjugateMap[this.selectedMode])) {
-              this.selectedTense = Object.keys(conjugateMap[this.selectedMode])[0]
-          }
-          return conjugateMap[this.selectedMode][this.selectedTense]
+        return conjugateMap[selectedMode.value][selectedTense.value]
             .filter(form => {
-                return this.includeVosotros || form !== 'vosotros'
+                return includeVosotros.value || form !== 'vosotros'
             })
-        },
-        dataLayout()
-        {
-            let dataLayout = []
-            let mode = this.selectedMode
-            let tense = this.selectedTense
-            this.conjugateList.forEach(conjugate => {
-                let row = {
-                    infinitive: conjugate.infinitive,
-                }
-                conjugateMap[mode][tense].forEach(form => {
-                    row[form] = conjugate[`${mode}_${tense}_${form}`]
-                })
-                dataLayout.push(row)
+    })
+    const gridRows = computed(()=> {
+        return { gridTemplateColumns: `50px repeat(${currentFormsList.value.length}, minmax(200px, 1fr))` }
+    })
+
+    let dataLayout = ()=> {
+        let dataLayout = []
+        let mode = selectedMode.value
+        let tense = selectedTense.value
+        conjugateList.forEach(conjugate => {
+            let row = {
+                infinitive: conjugate.infinitive,
+            }
+            conjugateMap[mode][tense].forEach(form => {
+                row[form] = conjugate[`${mode}_${tense}_${form}`]
             })
-            return dataLayout
-        },
-        gridRows() {
-            return { gridTemplateColumns: `50px repeat(${this.currentFormsList.length}, minmax(200px, 1fr))` }
-        },
-    },
-    methods: {
-        initAnswers() {
-            this.answers = {}
-        },
-        onUpdateAnswer({key, value}) {
-            this.answers[key] = value
-        },
-        shuffleVerbs() {
-            this.conjugateList = this.conjugateList.sort(() => Math.random() - 0.5)
-        },
-    },
-}
+            dataLayout.push(row)
+        })
+
+        return dataLayout
+    }
 </script>
 
 <style scoped>
