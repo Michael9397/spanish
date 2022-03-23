@@ -1,46 +1,51 @@
 <template>
+    <Head title="Conjugate Multiple" />
 
-    <div class="2xl:p-40 bg-gray-900 text-white">
-        <div>
-            <div class="flex items-center h-full">
-                <select id="mode-selector" v-model="selectedMode" key="selectedMode" class="bg-gray-700" @change="initAnswers">
-                    <option v-for="mode in modes" :value="mode">{{ mode.capitalize() }}</option>
-                </select>
-                <select id="tense-selector" v-model="selectedTense" key="selectedTense" class="bg-gray-700" @change="initAnswers">
-                    <option v-for="tense in currentTenseList" :value="tense">{{ tense.capitalizeEach() }}</option>
-                </select>
-                <button @click="shuffleVerbs" class="ml-4 bg-gray-700 rounded-lg p-2">Shuffle Verbs</button>
-                <button @click="initAnswers" class="ml-4 bg-gray-700 rounded-lg p-2">Clear Answers</button>
-                <label class="pl-4 flex items-center">
-                    <input type="checkbox" v-model="includeVosotros">
-                    <span class="pl-2">Include vosotros</span>
-                </label>
-            </div>
-            <div class="bg-gray-800 p-6">
-                <h2 class="font-extrabold text-3xl">{{ currentTenseTitle }}</h2>
-                <div class="grid" :style="gridRows">
-                    <div class="text-right max-w-xs"></div>
-                    <div v-for="form in currentFormsList" class="font-bold ml-5 font-extrabold">
-                        {{ form }}
-                    </div>
+    <BreezeAuthenticatedLayout>
+        <div class="p-8 bg-gray-900 text-white">
+            <div>
+                <div class="flex items-center h-full">
+                    <select id="mode-selector" v-model="selectedMode" key="selectedMode" class="bg-gray-700" @change="initAnswers">
+                        <option v-for="mode in modes" :value="mode">{{ mode.capitalize() }}</option>
+                    </select>
+                    <select id="tense-selector" v-model="selectedTense" key="selectedTense" class="bg-gray-700" @change="initAnswers">
+                        <option v-for="tense in currentTenseList" :value="tense">{{ tense.capitalizeEach() }}</option>
+                    </select>
+                    <button @click="shuffleVerbs" class="ml-4 bg-gray-700 rounded-lg p-2">Shuffle Verbs</button>
+                    <button @click="initAnswers" class="ml-4 bg-gray-700 rounded-lg p-2">Clear Answers</button>
+                    <label class="pl-4 flex items-center">
+                        <input type="checkbox" v-model="includeVosotros">
+                        <span class="pl-2">Include vosotros</span>
+                    </label>
                 </div>
-                <div v-for="item in dataLayout()" class="grid" :style="gridRows">
-                    <div class="pt-4 text-right font-extrabold max-w-xs">{{ item.infinitive }}</div>
-                    <div v-for="form in currentFormsList">
-                        <PracticeInput
-                            :correct-answer="item[form]"
-                            :answer-key="`${item.infinitive}_${form}`"
-                            :current-answer="answers[`${item.infinitive}_${form}`]"
-                            @change-answer="onUpdateAnswer"
-                        ></PracticeInput>
+                <div class="bg-gray-800 p-6">
+                    <h2 class="font-extrabold text-3xl">{{ currentTenseTitle }}</h2>
+                    <div class="grid" :style="gridRows">
+                        <div class="text-right max-w-xs"></div>
+                        <div v-for="form in currentFormsList" class="font-bold ml-5 font-extrabold">
+                            {{ form }}
+                        </div>
+                    </div>
+                    <div v-for="item in dataLayout()" class="grid" :style="gridRows">
+                        <div class="pt-4 text-right font-extrabold max-w-xs">{{ item.infinitive }}</div>
+                        <div v-for="form in currentFormsList">
+                            <PracticeInput
+                                :correct-answer="item[form]"
+                                :answer-key="`${item.infinitive}_${form}`"
+                                :current-answer="answers[`${item.infinitive}_${form}`]"
+                                @change-answer="onUpdateAnswer"
+                            ></PracticeInput>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </BreezeAuthenticatedLayout>
 </template>
 
 <script setup>
+    import BreezeAuthenticatedLayout from '@/Layouts/Authenticated.vue';
+    import { Head } from '@inertiajs/inertia-vue3';
     import PracticeInput  from "@/Components/PracticeInput"
     import { conjugateMap } from "@/Partials/ConjugateMap"
     import { ref, computed } from "vue"

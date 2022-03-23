@@ -13,7 +13,7 @@ class ConjugateController extends Controller
     /**
      * @return \Inertia\Response
      */
-    public function index()
+    public function single()
     {
         return Inertia::render('Conjugate', ['conjugates' => Conjugate::all()]);
     }

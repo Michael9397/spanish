@@ -158,16 +158,6 @@
       "POST"
     ]
   },
-  "dashboard": {
-    "name": "dashboard",
-    "domain": null,
-    "action": "Closure",
-    "uri": "dashboard",
-    "method": [
-      "GET",
-      "HEAD"
-    ]
-  },
   "conjugate": {
     "name": "conjugate",
     "domain": null,
@@ -178,11 +168,51 @@
       "HEAD"
     ]
   },
+  "dashboard": {
+    "name": "dashboard",
+    "domain": null,
+    "action": "Closure",
+    "uri": "dashboard",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "conjugate.single": {
+    "name": "conjugate.single",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\ConjugateController@single",
+    "uri": "conjugate/single",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
   "conjugate.multiple": {
     "name": "conjugate.multiple",
     "domain": null,
     "action": "App\\Http\\Controllers\\ConjugateController@multiple",
     "uri": "conjugate/multiple",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "guest.conjugate.single": {
+    "name": "guest.conjugate.single",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\GuestConjugateController@single",
+    "uri": "guest/conjugate/single",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "guest.conjugate.multiple": {
+    "name": "guest.conjugate.multiple",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\GuestConjugateController@multiple",
+    "uri": "guest/conjugate/multiple",
     "method": [
       "GET",
       "HEAD"

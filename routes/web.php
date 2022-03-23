@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ConjugateController;
+use App\Http\Controllers\GuestConjugateController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -24,11 +25,16 @@ Route::get('/', function () {
         'phpVersion' => PHP_VERSION,
     ]);
 });
+Route::group(['middleware' => ['auth']], function () {
+    Route::get('/conjugate', [ConjugateController::class, 'index'])->name('conjugate');
+    Route::get('/dashboard', function () {
+        return Inertia::render('Dashboard');
+    })->name('dashboard');
+    Route::get('/conjugate/single', [ConjugateController::class, 'single'])->name('conjugate.single');
+    Route::get('/conjugate/multiple', [ConjugateController::class, 'multiple'])->name('conjugate.multiple');
+});
+Route::get('/guest/conjugate/single', [GuestConjugateController::class, 'single'])->name('guest.conjugate.single');
+Route::get('/guest/conjugate/multiple', [GuestConjugateController::class, 'multiple'])->name('guest.conjugate.multiple');
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/conjugate', [ConjugateController::class, 'index'])->name('conjugate');
-Route::get('/conjugate/multiple', [ConjugateController::class, 'multiple'])->name('conjugate.multiple');
 require __DIR__.'/auth.php';

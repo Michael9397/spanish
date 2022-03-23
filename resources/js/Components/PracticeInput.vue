@@ -56,7 +56,7 @@
 
     const speech = new Speech()
     const speakAnswer = ()=> {
-        speech.speak(props.correctAnswer)
+        speech.speak({ text: props.correctAnswer })
     }
 
 </script>

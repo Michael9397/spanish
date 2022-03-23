@@ -4,14 +4,14 @@ describe('conjugate multiple verbs', () => {
     })
 
     it('can select mode and tense', () => {
-        cy.visit(Cypress.Laravel.route('conjugate.multiple'))
+        cy.visit(Cypress.Laravel.route('guest.conjugate.multiple'))
         cy.get('#mode-selector').select('perfect')
         cy.get('#tense-selector').select('future')
         cy.contains('Perfect Future')
     })
 
     it('shows correct svg when correct answer inserted', () => {
-        cy.visit(Cypress.Laravel.route('conjugate.multiple'))
+        cy.visit(Cypress.Laravel.route('guest.conjugate.multiple'))
         cy.get('#mode-selector').select('imperative')
         cy.get('#tense-selector').select('affirmative')
         cy.get('#hablar-tu').type('habla')
@@ -21,7 +21,7 @@ describe('conjugate multiple verbs', () => {
     })
 
     it('toggles the answer when selected', () => {
-        cy.visit(Cypress.Laravel.route('conjugate.multiple'))
+        cy.visit(Cypress.Laravel.route('guest.conjugate.multiple'))
         cy.get('#mode-selector').select('progressive')
         cy.get('#tense-selector').select('preterite')
         cy.get('#ser-el-toggle-current-answer').click()
