@@ -29,4 +29,47 @@ describe('conjugate multiple verbs', () => {
         cy.get('#ser-el-hide-current-answer').click()
         cy.get('#ser-el-correct-answer').should('not.exist')
     })
+
+    it('clears_answers_when_clear_button_pressed', ()=> {
+
+        cy.visit(Cypress.Laravel.route('guest.conjugate.multiple'))
+        cy.get('#hablar-yo').type('Hopefully')
+        cy.get('#hablar-tu').type('This')
+        cy.get('#hablar-el').type('Disappears')
+        cy.get('button:contains("Clear")').click()
+        cy.get('#hablar-yo').should('have.value', '')
+        cy.get('#hablar-tu').should('have.value', '')
+        cy.get('#hablar-el').should('have.value', '')
+
+        cy.visit(Cypress.Laravel.route('guest.conjugate.single'))
+        cy.get('#indicative-present-yo').type('Hopefully')
+        cy.get('#indicative-present-tu').type('This')
+        cy.get('#indicative-present-el').type('Disappears')
+        cy.get('button:contains("Clear")').click()
+        cy.get('#indicative-present-yo').should('have.value', '')
+        cy.get('#indicative-present-tu').should('have.value', '')
+        cy.get('#indicative-present-el').should('have.value', '')
+
+        cy.login()
+        cy.visit(Cypress.Laravel.route('conjugate.multiple'))
+        cy.get('#hablar-yo').type('Hopefully')
+        cy.get('#hablar-tu').type('This')
+        cy.get('#hablar-el').type('Disappears')
+        cy.get('button:contains("Clear")').click()
+        cy.get('#hablar-yo').should('have.value', '')
+        cy.get('#hablar-tu').should('have.value', '')
+        cy.get('#hablar-el').should('have.value', '')
+
+        cy.visit(Cypress.Laravel.route('conjugate.single'))
+        cy.get('#indicative-present-yo').type('Hopefully')
+        cy.get('#indicative-present-tu').type('This')
+        cy.get('#indicative-present-el').type('Disappears')
+        cy.get('button:contains("Clear")').click()
+        cy.get('#indicative-present-yo').should('have.value', '')
+        cy.get('#indicative-present-tu').should('have.value', '')
+        cy.get('#indicative-present-el').should('have.value', '')
+
+
+
+    })
 })

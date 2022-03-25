@@ -62,12 +62,12 @@
     })
 
     const onUpdateAnswer = ({key, value})=> {
-        answers[key] = value
+        answers.value[key] = value
     }
     const shuffleVerbs = ()=> {
         conjugateList = conjugateList.sort(() => Math.random() - 0.5)
     }
-    const initAnswers = ()=> { answers = {} }
+    const initAnswers = ()=> { answers.value = {} }
     initAnswers()
     conjugateList = props.conjugates
 
