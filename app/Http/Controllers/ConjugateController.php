@@ -15,7 +15,7 @@ class ConjugateController extends Controller
      */
     public function single()
     {
-        return Inertia::render('Conjugate', ['conjugates' => Conjugate::all()]);
+        return Inertia::render('Conjugate', ['conjugates' => Conjugate::orderBy('infinitive')->get()]);
     }
 
 
@@ -24,7 +24,7 @@ class ConjugateController extends Controller
      */
     public function multiple()
     {
-        return Inertia::render('ConjugateMultiple', ['conjugates' => Conjugate::all()]);
+        return Inertia::render('ConjugateMultiple', ['conjugates' => $this->getConjugateList()]);
     }
 
 
@@ -94,4 +94,66 @@ class ConjugateController extends Controller
     {
         //
     }
+
+    private function getConjugateList()
+    {
+        $conjugates = [$this->getArVerb(), $this->getErVerb(), $this->getIrVerb(), ...$this->getIrregularVerbs()];
+        return Conjugate::whereIn('infinitive', $conjugates)->get()
+            ->sortBy(function ($conjugate) use ($conjugates) {
+                return array_search($conjugate->infinitive, $conjugates);
+            })->values();
+    }
+
+    private function getArVerb() {
+        $settings = auth()->user()->settings['conjugateSelections'] ?? [];
+        if (empty($settings['ar'])) {
+            return 'hablar';
+        }
+
+        if ($settings['ar'] === 'random') {
+            $arVerbs = ['ayudar', 'hablar', 'mirar', 'escuchar'];
+            $randKey = array_rand($arVerbs);
+
+            return $arVerbs[$randKey];
+        }
+
+        return $settings['ar'];
+    }
+
+    private function getErVerb() {
+        $settings = auth()->user()->settings['conjugateSelections'] ?? [];
+        if (empty($settings['er'])) {
+            return 'comer';
+        }
+
+        if ($settings['er'] === 'random') {
+            $erVerbs = ['comer', 'aprender', 'deber', 'vender'];
+            $randKey = array_rand($erVerbs);
+            return $erVerbs[$randKey];
+        }
+
+        return $settings['er'];
+    }
+
+    private function getIrVerb() {
+        $settings = auth()->user()->settings['conjugateSelections'] ?? [];
+        if (empty($settings['ir'])) {
+            return 'subir';
+        }
+
+        if ($settings['ir'] === 'random') {
+            $irVerbs = ['vivir','permitir','recibir','abrir'];
+            $randKey = array_rand($irVerbs);
+            return $irVerbs[$randKey];
+        }
+
+        return $settings['ir'];
+    }
+
+    private function getIrregularVerbs() {
+        return ['tener', 'poder', 'querer', 'ser', 'estar', 'decir', 'ir', 'hacer', 'ver', 'dar'];
+    }
+
+
+
 }

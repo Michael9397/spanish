@@ -108,7 +108,7 @@ const showingNavigationDropdown = ref(false);
             </header>
 
             <!-- Page Content -->
-            <main class="bg-gray-800">
+            <main class="bg-gray-800 p-8 text-white h-screen">
                 <slot />
             </main>
         </div>

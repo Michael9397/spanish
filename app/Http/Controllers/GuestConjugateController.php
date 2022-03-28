@@ -10,7 +10,7 @@ class GuestConjugateController extends Controller
 {
     public function single()
     {
-        return Inertia::render('GuestPractice/Conjugate', ['conjugates' => Conjugate::all()]);
+        return Inertia::render('GuestPractice/Conjugate', ['conjugates' => Conjugate::where('id', '<=', 13)->get()]);
     }
 
 
@@ -19,6 +19,6 @@ class GuestConjugateController extends Controller
      */
     public function multiple()
     {
-        return Inertia::render('GuestPractice/ConjugateMultiple', ['conjugates' => Conjugate::all()]);
+        return Inertia::render('GuestPractice/ConjugateMultiple', ['conjugates' => Conjugate::where('id', '<=', 13)->get()]);
     }
 }

@@ -2,7 +2,7 @@
     <Head title="Conjugate Multiple" />
 
     <BreezeAuthenticatedLayout>
-        <div class="p-8 bg-gray-900 text-white">
+        <div class="">
             <div>
                 <div class="flex items-center h-full">
                     <select id="mode-selector" v-model="selectedMode" key="selectedMode" class="bg-gray-700" @change="initAnswers">

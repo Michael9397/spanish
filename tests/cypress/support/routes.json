@@ -178,6 +178,15 @@
       "HEAD"
     ]
   },
+  "settings": {
+    "name": "settings",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\SettingsController@update",
+    "uri": "settings",
+    "method": [
+      "POST"
+    ]
+  },
   "conjugate.single": {
     "name": "conjugate.single",
     "domain": null,
