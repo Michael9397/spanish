@@ -5,8 +5,11 @@ import BreezeDropdownLink from '@/Components/DropdownLink.vue';
 import BreezeNavLink from '@/Components/NavLink.vue';
 import BreezeResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import { Link } from '@inertiajs/inertia-vue3';
+import FlashMessage from "@/Components/FlashMessage"
+import Inertia from '@inertiajs/inertia';
 
 const showingNavigationDropdown = ref(false);
+
 </script>
 
 <template>
@@ -56,6 +59,9 @@ const showingNavigationDropdown = ref(false);
                                     </template>
 
                                     <template #content>
+                                        <BreezeDropdownLink :href="route('settings')" method="get" as="button">
+                                            Settings
+                                        </BreezeDropdownLink>
                                         <BreezeDropdownLink :href="route('logout')" method="post" as="button">
                                             Log Out
                                         </BreezeDropdownLink>
@@ -92,6 +98,9 @@ const showingNavigationDropdown = ref(false);
                         </div>
 
                         <div class="mt-3 space-y-1">
+                            <BreezeResponsiveNavLink :href="route('settings')" method="get" as="button">
+                                Settings
+                            </BreezeResponsiveNavLink>
                             <BreezeResponsiveNavLink :href="route('logout')" method="post" as="button">
                                 Log Out
                             </BreezeResponsiveNavLink>
@@ -109,6 +118,7 @@ const showingNavigationDropdown = ref(false);
 
             <!-- Page Content -->
             <main class="bg-gray-800 p-8 text-white h-screen">
+                <flash-message/>
                 <slot />
             </main>
         </div>

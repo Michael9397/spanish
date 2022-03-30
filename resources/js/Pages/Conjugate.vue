@@ -9,10 +9,6 @@
                         <option v-for="(verb, index) in conjugates" :value="index">{{ verb['infinitive'] }}</option>
                     </select>
                     <button @click="initAnswers" class="ml-4 bg-gray-700 rounded-lg p-2">Clear Answers</button>
-                    <label class="ml-4 flex items-center">
-                        <input type="checkbox" v-model="includeVosotros">
-                        <span class="pl-2">Include vosotros</span>
-                    </label>
                 </div>
                 <h2 class="font-extrabold text-3xl mt-8">{{ conjugates[selectedVerb].infinitive.capitalize() }}</h2>
                 <div v-for="(map, tense) in conjugateMap" class="mb-8">
@@ -45,6 +41,7 @@
     import { conjugateMap } from "@/Partials/ConjugateMap"
     import PracticeInput  from "@/Components/PracticeInput"
     import { ref, computed } from 'vue'
+    import Inertia from "@inertiajs/inertia"
 
     let props = defineProps({
         conjugates: {
@@ -52,7 +49,7 @@
             required: true
         }
     })
-    const includeVosotros = ref(false)
+    const includeVosotros = ref(Inertia.Inertia.page.props?.auth?.user?.settings?.includeVosotros || false);
     const answers = ref({})
     const initAnswers = ()=> { answers.value = {} }
     initAnswers()

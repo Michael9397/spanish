@@ -32,7 +32,7 @@ Route::group(['middleware' => ['auth']], function () {
     })->name('dashboard');
     Route::get('/settings', [\App\Http\Controllers\SettingsController::class, 'index'])
          ->name('settings');
-    Route::post('/settings', [\App\Http\Controllers\SettingsController::class, 'update'])->name('settings');
+    Route::post('/settings', [\App\Http\Controllers\SettingsController::class, 'update'])->name('settings.post');
 
     Route::get('/conjugate/single', [ConjugateController::class, 'single'])->name('conjugate.single');
     Route::get('/conjugate/multiple', [ConjugateController::class, 'multiple'])->name('conjugate.multiple');

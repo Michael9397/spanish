@@ -181,6 +181,16 @@
   "settings": {
     "name": "settings",
     "domain": null,
+    "action": "App\\Http\\Controllers\\SettingsController@index",
+    "uri": "settings",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "settings.post": {
+    "name": "settings.post",
+    "domain": null,
     "action": "App\\Http\\Controllers\\SettingsController@update",
     "uri": "settings",
     "method": [

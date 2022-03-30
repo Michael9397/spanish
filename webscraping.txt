@@ -18,6 +18,7 @@ indicativeRows.forEach((row, index) => {
 })
 let indicativeHeaders = ['type', 'present', 'preterite', 'imperfect', 'conditional','future'];
 let conjugatedValues = {};
+conjugatedValues.infinitive = document.querySelector('h1').innerHTML;
 for (let i = 1;i < indicativeRows.length;i++) {
  	let cell0 = indicativeCells[i][0].innerText.toLowerCase()
  	cell0 = cell0.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace('.', '')

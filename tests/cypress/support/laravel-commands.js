@@ -212,7 +212,7 @@ Cypress.Commands.add('create', (model, count = 1, attributes = {}, load = [], st
  *          cy.refreshDatabase({ '--drop-views': true });
  */
 Cypress.Commands.add('refreshDatabase', (options = {}) => {
-    return cy.artisan('migrate:fresh', options);
+    return cy.artisan('migrate:fresh --seed', options);
 });
 
 /**

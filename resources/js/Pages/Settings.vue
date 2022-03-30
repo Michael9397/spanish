@@ -2,22 +2,30 @@
 import BreezeAuthenticatedLayout from '@/Layouts/Authenticated.vue'
 import { Head } from '@inertiajs/inertia-vue3'
 import {Inertia} from "@inertiajs/inertia"
-import { reactive } from 'vue'
+import { ref, reactive } from 'vue'
 
-let { form } = defineProps({
-    form: {
+let props = defineProps({
+    conjugateForms: {
         type: Object,
         default: () => ({
             ar: 'hablar',
             er: 'comer',
             ir: 'subir',
         })
-    }
+    },
+    includeVosotros: {
+        type: Boolean,
+        default: false
+    },
 })
-
+const form = reactive(Object.assign({}, props.conjugateForms))
+const useVosotros = ref(props.includeVosotros)
 
 const submit = () => {
-    Inertia.post('/settings', {form})
+    Inertia.post('/settings', {
+        conjugateForms: form,
+        includeVosotros: useVosotros.value
+    })
 }
 
 </script>
@@ -70,20 +78,23 @@ const submit = () => {
                 <option value="abrir">Abrir</option>
             </select>
         </label>
+        <div class="mt-6">
+            <label>
+                <input
+                    id="vosotros-checkbox"
+                    type="checkbox"
+                    v-model="useVosotros"
+                />Include Vosotros form on conjugations</label>
+        </div>
+
         <br>
         <button
             id="save-settings"
             @click="submit"
-            class="border border-white rounded-md mt-4 px-4 py-2 font-bold"
+            class="border border-white rounded-md mt-4 px-4 py-2 font-bold bg-gray-700"
         >Save</button>
     </BreezeAuthenticatedLayout>
 </template>
-
-<script>
-export default {
-    name: "Settings"
-}
-</script>
 
 <style scoped>
     h3 {

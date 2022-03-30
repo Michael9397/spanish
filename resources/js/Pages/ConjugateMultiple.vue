@@ -13,10 +13,6 @@
                     </select>
                     <button @click="shuffleVerbs" class="ml-4 bg-gray-700 rounded-lg p-2">Shuffle Verbs</button>
                     <button @click="initAnswers" class="ml-4 bg-gray-700 rounded-lg p-2">Clear Answers</button>
-                    <label class="pl-4 flex items-center">
-                        <input type="checkbox" v-model="includeVosotros">
-                        <span class="pl-2">Include vosotros</span>
-                    </label>
                 </div>
                 <div class="bg-gray-800 p-6">
                     <h2 class="font-extrabold text-3xl">{{ currentTenseTitle }}</h2>
@@ -49,17 +45,19 @@
     import PracticeInput  from "@/Components/PracticeInput"
     import { conjugateMap } from "@/Partials/ConjugateMap"
     import { ref, computed } from "vue"
+    import Inertia from "@inertiajs/inertia"
     let props = defineProps({
         conjugates: {
             type: Array,
             required: true
-        }
+        },
+
     })
     let selectedMode = ref('indicative')
     let selectedTense = ref('present')
     let answers = ref({})
     let conjugateList = ref([])
-    let includeVosotros = ref(false)
+    const includeVosotros = ref(Inertia.Inertia.page.props?.auth?.user?.settings?.includeVosotros || false);
     let modes = ref(Object.keys(conjugateMap))
 
     const currentTenseList = computed(()=> {

@@ -27,4 +27,24 @@ describe('conjugate settings tests', () => {
         cy.contains('deber')
         cy.contains('vivir')
     })
+
+    it('toggle vosotros form in conjugate files', () => {
+        cy.visit('/settings')
+        cy.get('#vosotros-checkbox').click()
+        cy.get('#save-settings').click()
+
+        cy.visit('/conjugate/multiple')
+        cy.contains('vosotros')
+        cy.visit('/conjugate/single')
+        cy.contains('vosotros')
+
+        cy.visit('/settings')
+        cy.get('#vosotros-checkbox').click()
+        cy.get('#save-settings').click()
+
+        cy.visit('/conjugate/multiple')
+        cy.get('#hablar-vosotros').should('not.exist')
+        cy.visit('/conjugate/single')
+        cy.get('#indicative-present-vosotros').should('not.exist')
+    })
 })
