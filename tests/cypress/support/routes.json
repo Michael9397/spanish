@@ -217,6 +217,16 @@
       "HEAD"
     ]
   },
+  "conjugate.list": {
+    "name": "conjugate.list",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\ConjugateController@list",
+    "uri": "conjugate/{list}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
   "guest.conjugate.single": {
     "name": "guest.conjugate.single",
     "domain": null,

@@ -43,7 +43,7 @@ const open = ref(false);
 
 <template>
     <div class="relative">
-        <div @click="open = ! open">
+        <div class="h-full" @click="open = ! open">
             <slot name="trigger" />
         </div>
 

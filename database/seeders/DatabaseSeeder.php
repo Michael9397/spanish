@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
            'email' => 'michael@example.com',
            'password' => bcrypt('abc12345'),
         ]);
-        (new ConjugateSeeder)->run();
+        (new ConjugateSeeder())->run();
+        (new ConjugateListSeeder())->run();
     }
 }

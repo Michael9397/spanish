@@ -1,8 +1,9 @@
 <template>
     <div>
-        <Head title="Conjugate Multiple" />
+        <Head title="Conjugate Single" />
 
         <BreezeAuthenticatedLayout>
+            <h2 class="my-4 text-2xl text-red-600">Conjugate Single Verb</h2>
             <div class="p-16 bg-gray-800 text-white">
                 <div class="flex items-center h-full">
                     <select v-model="selectedVerb" key="selectedVerb" class="bg-gray-700">

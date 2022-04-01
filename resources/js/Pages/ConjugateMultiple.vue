@@ -3,6 +3,7 @@
 
     <BreezeAuthenticatedLayout>
         <div class="">
+            <h2 class="my-4 text-2xl text-red-600">{{ props.listName }}</h2>
             <div>
                 <div class="flex items-center h-full">
                     <select id="mode-selector" v-model="selectedMode" key="selectedMode" class="bg-gray-700" @change="initAnswers">
@@ -51,7 +52,10 @@
             type: Array,
             required: true
         },
-
+        listName: {
+            type: String,
+            default: 'Conjugate Multiple'
+        },
     })
     let selectedMode = ref('indicative')
     let selectedTense = ref('present')

@@ -36,6 +36,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/conjugate/single', [ConjugateController::class, 'single'])->name('conjugate.single');
     Route::get('/conjugate/multiple', [ConjugateController::class, 'multiple'])->name('conjugate.multiple');
+    Route::get('/conjugate/{list}', [ConjugateController::class, 'list'])->name('conjugate.list');
 });
 Route::get('/guest/conjugate/single', [GuestConjugateController::class, 'single'])->name('guest.conjugate.single');
 Route::get('/guest/conjugate/multiple', [GuestConjugateController::class, 'multiple'])->name('guest.conjugate.multiple');

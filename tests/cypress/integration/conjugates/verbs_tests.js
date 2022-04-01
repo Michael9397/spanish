@@ -31,7 +31,6 @@ describe('conjugate multiple verbs', () => {
     })
 
     it('clears_answers_when_clear_button_pressed', ()=> {
-
         cy.visit(Cypress.Laravel.route('guest.conjugate.multiple'))
         cy.get('#hablar-yo').type('Hopefully')
         cy.get('#hablar-tu').type('This')
@@ -68,8 +67,15 @@ describe('conjugate multiple verbs', () => {
         cy.get('#indicative-present-yo').should('have.value', '')
         cy.get('#indicative-present-tu').should('have.value', '')
         cy.get('#indicative-present-el').should('have.value', '')
+    })
 
-
-
+    it('correctly_loads_conjugate_lists', ()=> {
+        cy.login()
+        cy.visit(Cypress.Laravel.route('conjugate.list', { list: 'ar-verbs'}))
+        cy.contains('Ar Verbs')
+        cy.contains('ayudar')
+        cy.contains('escuchar')
+        cy.contains('hablar')
+        cy.contains('mirar')
     })
 })

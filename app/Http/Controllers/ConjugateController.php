@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreConjugateRequest;
 use App\Http\Requests\UpdateConjugateRequest;
 use App\Models\Conjugate;
+use App\Models\ConjugateList;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class ConjugateController extends Controller
@@ -27,7 +29,15 @@ class ConjugateController extends Controller
         return Inertia::render('ConjugateMultiple', ['conjugates' => $this->getConjugateList()]);
     }
 
-
+    public function list(Request $request, $listSlug)
+    {
+        $list = ConjugateList::where('slug', $listSlug)->firstOrFail();
+        $conjugates = Conjugate::whereIn('infinitive', $list->conjugate_list)->orderBy('infinitive')->get();
+        return Inertia::render('ConjugateMultiple', [
+            'conjugates' => $conjugates,
+            'listName' => $list->name,
+        ]);
+    }
 
     /**
      * Show the form for creating a new resource.

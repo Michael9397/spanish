@@ -14,14 +14,14 @@ const showingNavigationDropdown = ref(false);
 
 <template>
     <div>
-        <div class="min-h-screen bg-gray-100">
-            <nav class="bg-gray-800 border-b border-gray-100 text-white">
+        <div class="min-h-screen">
+            <nav class="border-b border-gray-400 text-white">
                 <!-- Primary Navigation Menu -->
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="flex justify-between h-16">
                         <div class="flex">
                             <!-- Logo -->
-                            <div class="shrink-0 flex items-center text-3xl font-extrabold text-red-800">
+                            <div class="shrink-0 flex items-center text-3xl font-extrabold text-red-600">
                                 <Link :href="route('dashboard')">
                                     Spanish Practice
                                 </Link>
@@ -32,12 +32,32 @@ const showingNavigationDropdown = ref(false);
                                 <BreezeNavLink :href="route('dashboard')" :active="route().current('dashboard')">
                                     Dashboard
                                 </BreezeNavLink>
-                                <BreezeNavLink :href="route('conjugate.single')" :active="route().current('conjugate.single')">
-                                    Conjugate Single Verbs
-                                </BreezeNavLink>
-                                <BreezeNavLink :href="route('conjugate.multiple')" :active="route().current('conjugate.multiple')">
-                                    Conjugate Multiple Verbs
-                                </BreezeNavLink>
+                                <BreezeDropdown>
+                                    <template #trigger>
+                                        <div class="flex items-center h-full">
+                                            <button type="button" class="inline-flex items-center px-1 pt-1 text-sm leading-5 text-red-500 hover:text-red-400 focus:outline-none focus:border-indigo-300 transition  duration-150 ease-in-out">
+                                                Conjugate Practice
+                                            </button>
+                                        </div>
+                                    </template>
+
+                                    <template #content>
+                                        <BreezeNavLink :href="route('conjugate.single')" :active="route().current('conjugate.single')">
+                                            Conjugate Single Verbs
+                                        </BreezeNavLink>
+                                        <BreezeNavLink :href="route('conjugate.multiple')" :active="route().current('conjugate.multiple')">
+                                            Conjugate Multiple Verbs
+                                        </BreezeNavLink>
+                                        <div v-for="list in $page.props.conjugateLists">
+                                            <BreezeNavLink
+                                                :href="`/conjugate/${list.slug}`"
+                                                :active="`/conjugate/${list.slug}`"
+                                            >
+                                                {{ list.name }}
+                                            </BreezeNavLink>
+                                        </div>
+                                    </template>
+                                </BreezeDropdown>
 
                             </div>
                         </div>
